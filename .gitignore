@@ -1,0 +1,16 @@
+node_modules
+dist
+
+.env
+.env.*
+
+release
+*.zip
+
+.cache
+blocked.txt
+*.log
+
+.DS_Store
+.vscode
+.idea

@@ -1,0 +1,62 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    background:
+      radial-gradient(ellipse 55% 75% at 0% 0%, rgba(255,255,255,.10), transparent 60%),
+      radial-gradient(ellipse 45% 60% at 100% 100%, rgba(42,163,220,.10), transparent 65%),
+      #101114;
+  }
+  .wall {
+    position: absolute; right: -150px; top: -170px;
+    display: grid; grid-template-columns: repeat(4, 150px); gap: 22px;
+    transform: rotate(-12deg);
+  }
+  .card {
+    height: 225px; border-radius: 16px; border: 1px solid #2a2b31;
+    background: linear-gradient(160deg, #24252b, #17181c);
+    display: grid; place-items: center;
+  }
+  .card svg { width: 46px; opacity: .12; }
+  .card.lit { background: linear-gradient(160deg, #3a3b42, #1d1e23); border-color: #44454c; }
+  .card.lit svg { opacity: .35; }
+  .card.blue { background: linear-gradient(160deg, #1e6f97, #143247); border-color: #2a8fc0; }
+  .card.blue svg { opacity: .55; }
+  .fade {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, #101114 34%, rgba(16,17,20,.85) 50%, rgba(16,17,20,0) 75%);
+  }
+  .content { position: absolute; left: 90px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+  .mark {
+    width: 84px; height: 84px; border-radius: 22px; background: #fff;
+    display: grid; place-items: center; margin-bottom: 34px;
+    box-shadow: 0 0 0 10px rgba(255,255,255,.06);
+  }
+  .wordmark { font-size: 150px; line-height: .95; letter-spacing: -3px; font-weight: 800; }
+  .wordmark span { font-weight: 400; color: #a1a1aa; letter-spacing: -2px; }
+  .tagline { margin-top: 26px; font-size: 38px; color: #d4d4d8; }
+  .pills { margin-top: 34px; display: flex; gap: 12px; }
+  .pill {
+    padding: 10px 20px; border-radius: 999px; border: 1px solid #2f3036;
+    background: rgba(255,255,255,.04); font-size: 20px; font-weight: 700; color: #e4e4e7;
+  }
+</style></head><body>
+  <div class="wall" id="wall"></div>
+  <div class="fade"></div>
+  <div class="content">
+    <div class="mark"><svg width="40" height="40" viewBox="0 0 64 64"><path d="M20 12l34 20-34 20z" fill="#101114"/></svg></div>
+    <div class="wordmark"><span>no</span>Bill</div>
+    <div class="tagline">Watch movies &amp; TV shows</div>
+    <div class="pills"><span class="pill">Movies</span><span class="pill">TV Shows</span><span class="pill">Subtitles</span></div>
+  </div>
+  <script>
+    const play = '<svg viewBox="0 0 64 64"><path d="M20 12l34 20-34 20z" fill="#fff"/></svg>';
+    const special = { 5: "lit", 10: "blue", 14: "lit", 19: "lit" };
+    document.getElementById("wall").innerHTML = Array.from({ length: 20 }, (_, i) =>
+      `<div class="card ${special[i] || ""}">${play}</div>`).join("");
+  </script>
+</body></html>

@@ -1,0 +1,42 @@
+[Unit]
+Description=noBill (movie and TV site)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=nobill
+Group=nobill
+WorkingDirectory=/opt/nobill
+EnvironmentFile=/etc/nobill.env
+ExecStart=/usr/bin/node server/index.js
+Restart=always
+RestartSec=3
+LimitNOFILE=65536
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+ProtectClock=true
+ProtectHostname=true
+ProtectKernelLogs=true
+ProtectProc=invisible
+RestrictNamespaces=true
+RestrictRealtime=true
+LockPersonality=true
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+UMask=0077
+ReadWritePaths=/opt/nobill/.cache
+MemoryMax=80%
+
+[Install]
+WantedBy=multi-user.target

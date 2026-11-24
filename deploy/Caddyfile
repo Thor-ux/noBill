@@ -1,0 +1,55 @@
+{
+	servers {
+		timeouts {
+			read_header 10s
+			read_body 10s
+			write 60s
+			idle 2m
+		}
+		max_header_size 16KB
+	}
+}
+
+(protect) {
+	#TLS_LINE#
+
+	header -Server
+
+	@badMethod not method GET HEAD
+	respond @badMethod 405
+
+	request_body {
+		max_size 16KB
+	}
+}
+
+example.com {
+	import protect
+
+	@scanners path *.php /wp-* /wordpress* /xmlrpc* /.git* /.env* /.aws* /cgi-bin/* /phpmyadmin* /vendor/* /admin* /config.* /server-status*
+	respond @scanners 404
+
+	@notCloudflare {
+		not remote_ip 173.245.48.0/20 103.21.244.0/22 103.22.200.0/22 103.31.4.0/22 141.101.64.0/18 108.162.192.0/18 190.93.240.0/20 188.114.96.0/20 197.234.240.0/22 198.41.128.0/17 162.158.0.0/15 104.16.0.0/13 104.24.0.0/14 172.64.0.0/13 131.0.72.0/22 2400:cb00::/32 2606:4700::/32 2803:f800::/32 2405:b500::/32 2405:8100::/32 2a06:98c0::/29 2c0f:f248::/32
+	}
+	request_header @notCloudflare -Cf-Connecting-Ip
+
+	reverse_proxy 127.0.0.1:3000 {
+		transport http {
+			dial_timeout 5s
+			response_header_timeout 60s
+		}
+	}
+
+	log {
+		output file /var/log/caddy/nobill.log {
+			roll_size 20MiB
+			roll_keep 5
+		}
+	}
+}
+
+www.example.com {
+	import protect
+	redir https://example.com{uri} permanent
+}
